@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+
+
+<!-- === Header Starts === -->
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+  <title>3DPE</title>
+
+  <link href="./assets/bootstrap.min.css" rel="stylesheet">
+  <link href="./assets/font.css" rel="stylesheet" type="text/css">
+  <link href="./assets/style.css" rel="stylesheet" type="text/css">
+  <!-- <style>
+    .container_rendering {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .item {
+        display: flex;
+        align-items: center;
+        margin: 0 10px;
+    }
+    .item img {
+        width: 50%;
+        height: auto;
+        margin-right: 0px;
+    }
+    .item video {
+        width: 50%;
+        height: auto;
+    }
+</style> -->
+</head>
+<!-- === Header Ends === -->
+
+
+<body>
+
+
+<!-- === Home Section Starts === -->
+<div class="section">
+  <!-- === Title Starts === -->
+  <div class="header">
+    <div class="title", style="padding-top: 35pt;min-width: 200px;">  <!-- Set padding as 10 if title is with two lines. -->
+      Real-time 3D-aware Portrait Editing from a Single Image
+    </div>
+   <h2 style="font-size:20px;text-align:center;"> ECCV 2024 <h2>
+  </div>
+  <!-- === Title Ends === -->
+  <div class="author">
+    <a href="https://scholar.google.com/citations?user=xUMjxi4AAAAJ" target="_blank">Qingyan Bai</a><sup>1,2</sup>&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="https://vivianszf.github.io" target="_blank">Zifan Shi</a><sup>1</sup> &nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="https://justimyhxu.github.io" target="_blank">Yinghao Xu</a><sup>3</sup>&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="https://ken-ouyang.github.io" target="_blank">Hao Ouyang</a><sup>1,2</sup>&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="https://openreview.net/profile?id=~Qiuyu_Wang1" target="_blank">Qiuyu Wang</a><sup>2</sup>  <br>
+    <a href="https://ceyuan.me/" target="_blank">Ceyuan Yang</a><sup>4</sup> &nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="https://xuanwangvc.github.io/" target="_blank">Xuan Wang</a><sup>2</sup> &nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="https://web.stanford.edu/~gordonwz/" target="_blank">Gordon Wetzstein</a><sup>3</sup>&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="https://shenyujun.github.io/" target="_blank">Yujun Shen</a><sup>2</sup>&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="https://cqf.io/" target="_blank">Qifeng Chen</a><sup>1</sup>
+  </div>
+  
+  <div class="institution">
+    <sup>1</sup> HKUST&nbsp;&nbsp;&nbsp;&nbsp;
+    <sup>2</sup> Ant Group&nbsp;&nbsp;&nbsp;&nbsp;<br>
+    <sup>3</sup> Stanford University&nbsp;&nbsp;&nbsp;&nbsp;
+    <sup>4</sup> Shanghai AI Laboratory &nbsp;&nbsp;&nbsp;&nbsp;
+  </div>
+
+  <div class="link">
+    <a href="https://arxiv.org/pdf/2402.14000" target="_blank">[Paper]</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="https://github.com/EzioBy/3dpe" target="_blank">[Code]</a>
+
+  </div>
+  <div class="teaser">
+    <img src="./assets/teaser.png">
+  </div>
+</div>
+<!-- === Home Section Ends === -->
+
+
+<!-- === Overview Section Starts === -->
+<div class="section">
+  <div class="title">Overview</div>
+  <div class="body">
+    This work presents 3DPE, a practical method that can efficiently edit a face image following given prompts, like reference images or
+text descriptions, in a 3D-aware manner. To this end, a lightweight module is distilled from a 3D portrait generator and a text-to-image model,
+which provide prior knowledge of face geometry and superior editing capability, respectively. Such a design brings two compelling advantages
+over existing approaches. First, our method achieves real-time editing with a feedforward network (i.e., ∼0.04s per image), over 100× faster
+than the second competitor. Second, thanks to the powerful priors, our module could focus on the learning of editing-related variations, such
+that it manages to handle various types of editing simultaneously in the training phase and further supports fast adaptation to user-specified 
+customized types of editing during inference.
+  </div>
+</div>
+<!-- === Overview Section Ends === -->
+
+
+
+<!-- === Method Section Starts === -->
+<div class="section">
+  <div class="title">Method</div>
+  <div class="body">
+
+    <b>Motivation.</b>
+    Live3D Portrait (Live3D) proposes a real-time 3D inversion method based on the two-branch structure.
+    The figure below demonstrate the disentanglement in Live3D features. 
+    We separately disable the features from the two branches E<sub>high</sub>(·) and E<sub>low</sub>(·) to infer the reconstructed image. 
+    Without E<sub>high</sub>(·), the output retains the coarse structure but loses its appearance. Conversely, 
+    when E<sub>low</sub>(·) is deactivated, the reconstructed portraits preserve the texture (such as the blue and
+    purple reflection on the glasses) but fail to capture the geometry. 
+
+
+    <table width="100%" style="margin: 20pt 0; text-align: center;">
+      <tr>
+        <td><img src="./assets/motivation.png" width="65%"></td>
+      </tr>
+    </table>
+
+    <b>Framework.</b>
+    Inspired by the aforementioned feature disentanglement, we propose to distill the priors in the 2D diffusion generative model and 3D GAN for real-time 3D-aware editing. 
+    The proposed model is fine-tuned from Live3D where the prompt features are fused with ones from E<sub>high</sub>(·) through cross-attention,
+    in order to further predict the triplane representation.
+
+    <table width="100%" style="margin: 20pt 0; text-align: center;">
+      <tr>
+        <td><img src="./assets/framework.png" width="85%"></td>
+      </tr>
+    </table>
+
+
+  </div>
+</div>
+<!-- === Method Section Ends === -->
+
+
+<!-- === Result Section Starts === -->
+<div class="section">
+  <div class="title">Results</div>
+  <div class="body">
+
+    Shown below are input images and the corresponding <b>stylized renderings</b>.<br><br>
+
+    <div class="container_rendering">
+      <div class="rendering_item">
+          <img src="assets/rendering/01.png">
+          <video src="assets/rendering/01.mp4" muted loop autoplay></video>
+      </div>
+      <div class="rendering_item">
+          <img src="assets/rendering/02.png">
+          <video src="assets/rendering/02.mp4" muted loop autoplay></video>
+      </div>
+      <div class="rendering_item">
+          <img src="assets/rendering/03.png">
+          <video src="assets/rendering/03.mp4" muted loop autoplay></video>
+      </div>
+      <div class="rendering_item">
+        <img src="assets/rendering/04.png">
+        <video src="assets/rendering/04.mp4" muted loop autoplay></video>
+    </div>
+  </div>
+  <br>
+
+
+    For <b>qualitative comparisons</b>, we compare the results of several baselines with image prompts and text prompts. 
+    In each case, we include the edited portraits as well as their novel view renderings. 
+
+    <table width="100%" style="margin: 20pt 0; text-align: center;">
+      <tr>
+        <td><img src="./assets/qualitative.jpg" width="90%"></td>
+      </tr>
+    </table>
+
+    The figure below includes: <b>(a) testing results of customized prompt adaptation and (b) its learning process</b>. 
+    We show the intermediate testing results at 10s, 1min, 2min and 5min during adaptation for the style golden statue.
+
+    <table width="100%" style="margin: 20pt 0; text-align: center;">
+      <tr>
+        <td><img src="./assets/adaptation.jpg" width="87%"></td>
+      </tr>
+    </table>
+
+  </div>
+</div>
+<!-- === Result Section Ends === -->
+
+
+<!-- === Reference Section Starts === -->
+<div class="section">
+  <div class="bibtex">BibTeX</div>
+<pre>
+@inproceedings{bai20243dpe,
+  title     = {Real-time 3D-aware Portrait Editing from a Single Image},
+  author    = {Bai, Qingyan and Shi, Zifan and Xu, Yinghao and Ouyang, Hao and Wang, Qiuyu and Yang, Ceyuan and Wang, Xuan and Wetzstein, Gordon and Shen, Yujun and Chen, Qifeng},
+  booktitle = {European Conference on Computer Vision},
+  year      = {2024}
+}
+</pre>
+
+  <!-- BZ: we should give other related work enough credits, -->
+  <!--     so please include some most relevant work and leave some comment to summarize work and the difference. -->
+  <div class="ref">Related Work</div>
+
+  <div class="citation">
+    <div class="image"><img src="./assets/eg3d.png"></div>
+    <div class="comment">
+      <a href="https://nvlabs.github.io/eg3d/" target="_blank">
+        Efficient Geometry-aware 3D Generative Adversarial Networks.
+        Eric R. Chan, Connor Z. Lin, Matthew A. Chan, Koki Nagano, Boxiao Pan, Shalini De Mello, Orazio Gallo, Leonidas Guibas, Jonathan Tremblay, Sameh Khamis, Tero Karras, Gordon Wetzstein.
+        CVPR 2022.</a><br>
+      <b>Comment:</b>
+      Proposes a hybrid explicit-implicit network that synthesizes high-resolution multi-view-consistent images in real time and also produces high-quality 3D geometry.
+    </div>
+  </div>
+
+  <div class="citation">
+    <div class="image"><img src="./assets/live3d.png"></div>
+    <div class="comment">
+      <a href="https://research.nvidia.com/labs/nxp/lp3d/" target="_blank">
+        Live 3D Portrait: Real-Time Radiance Fields for Single-Image Portrait View Synthesis.
+        Alex Trevithick, Matthew Chan, Michael Stengel, Eric R. Chan, Chao Liu, Zhiding Yu, Sameh Khamis, Manmohan Chandraker, Ravi Ramamoorthi, Koki Nagano.
+        TOG 2023.</a><br>
+      <b>Comment:</b>
+      Proposes a one-shot method to infer and render a 3D representation from a single unposed image in real-time.
+    </div>
+  </div>
+
+  <div class="citation">
+    <div class="image"><img src="./assets/ip2p.png"></div>
+    <div class="comment">
+      <a href="https://www.timothybrooks.com/instruct-pix2pix/" target="_blank">
+        InstructPix2Pix: Learning to Follow Image Editing Instructions.
+        Tim Brooks, Aleksander Holynski, Alexei A. Efros.
+        CVPR 2023.</a><br>
+      <b>Comment:</b>
+      Proposes an image editing method following human textual instructions.
+    </div>
+  </div>
+
+
+
+</div>
+<!-- === Reference Section Ends === -->
+
+</body>
+</html>
