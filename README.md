@@ -30,6 +30,59 @@ customized types of editing during inference.
 3D GAN for real-time 3D-aware editing.
 
 
+## Usage
+
+### 1. Environment Setup and Installation
+
+First, install the required dependencies using the provided requirements.txt:
+
+```bash
+pip install -r requirements.txt
+```
+
+
+### 2. Download Pre-trained Models
+
+Download the model weights from [this link](https://drive.google.com/file/d/1ZRH9WGHcostGAywqdJJp1kJBUiqN-xxF/view?usp=drive_link) and extract the `pretrained_models` folder to the current directory. The folder should contain:
+- `3dpe.pt` - Main model checkpoint
+- Other pre-trained components for the 3D portrait editing pipeline
+
+### 3. Running the Code
+
+#### Testing
+
+Use `test_scripts.py` to run inference on test images:
+
+```bash
+python test_scripts.py
+```
+
+This script will:
+- Load the pre-trained model from `./pretrained_models/3dpe.pt`
+- Process images from `./test_imgs/` directory (which contains `input/` and `ref/` subdirectories)
+- Generate Multi-view 3D-aware portrait editing results
+- Save outputs to `./results` directory
+
+
+#### Training
+
+Use `train_scripts.py` to train the model:
+
+```bash
+python train_scripts.py
+```
+
+This script will:
+- Use `torchrun` for distributed training with 8 GPUs
+- Load pre-trained models from `./pretrained_models/`
+- Train on your custom dataset (update the data paths in the script)
+- Save experiment outputs to `./exps` directory
+
+
+## Acknowledgments
+
+This version of code is based on [this implementation](https://github.com/Dong142857/Live3DPortrait) of Live3DPortrait.
+
 ## BibTeX
 
 If you find our work helpful for your research, please consider to cite:
