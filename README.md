@@ -66,6 +66,30 @@ This script will:
 
 #### Training
 
+##### Dataset Preparation
+
+Download the training dataset from [Google Drive](https://drive.google.com/drive/folders/1_lr7TWFamdSFjCf2qJ2hsRhxEToPb6kc?usp=drive_link). The dataset consists of 4 compressed files:
+- `3dpe_dataset.tar.gz.00` (3.81 GB)
+- `3dpe_dataset.tar.gz.01` (3.81 GB) 
+- `3dpe_dataset.tar.gz.02` (3.81 GB)
+- `3dpe_dataset.tar.gz.03` (392.1 MB)
+
+To extract the dataset, use the following commands:
+
+```bash
+# Combine the split files and extract
+cat 3dpe_dataset.tar.gz.* | tar -xzf -
+```
+
+This will create a `3dpe_dataset` folder with the following structure:
+```
+3dpe_dataset/
+├── train/          # Training images
+└── test/           # Test images
+```
+
+##### Training Process
+
 Use `train_scripts.py` to train the model:
 
 ```bash
@@ -75,7 +99,7 @@ python train_scripts.py
 This script will:
 - Use `torchrun` for distributed training with 8 GPUs
 - Load pre-trained models from `./pretrained_models/`
-- Train on your custom dataset (update the data paths in the script)
+- Train on the 3DPE dataset (train/ subfolder)
 - Save experiment outputs to `./exps` directory
 
 
